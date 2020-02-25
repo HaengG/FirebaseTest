@@ -9,14 +9,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.nslb.firebasetest.UI.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
-
-    private int[] tabIcons={
-            R.drawable.ic_person_black_24dp,
-            R.drawable.ic_message_black_24dp,
-            R.drawable.ic_store_black_24dp,
-            R.drawable.ic_local_hospital_black_24dp,
-            R.drawable.ic_settings_black_24dp
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,4 +24,12 @@ public class MainActivity extends AppCompatActivity {
             tabs.getTabAt(i).setIcon(tabIcons[i]);
         }
     }
+
+    private int[] tabIcons={
+            R.drawable.ic_person_black_24dp,
+            R.drawable.ic_message_black_24dp,
+            R.drawable.ic_store_black_24dp,
+            R.drawable.ic_local_hospital_black_24dp,
+            R.drawable.ic_settings_black_24dp
+    };
 }
