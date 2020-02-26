@@ -3,15 +3,25 @@ package com.nslb.firebasetest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.nslb.firebasetest.UI.SectionsPagerAdapter;
+import com.nslb.firebasetest.UI.SignInActivity;
 
 public class MainActivity extends AppCompatActivity {
+    public FirebaseMethodUserSettings firebaseMethodUserSettings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        firebaseMethodUserSettings= new FirebaseMethodUserSettings();
+        if (firebaseMethodUserSettings.CheckAuth() == 0){
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+        }
+
         setContentView(R.layout.activity_main);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this , getSupportFragmentManager());

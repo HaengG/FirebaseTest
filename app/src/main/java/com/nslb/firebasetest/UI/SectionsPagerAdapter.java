@@ -11,7 +11,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public TripTalkChatting mTripTalkChatting = null;
     public TripTalkDistribution mTripTalkDistribution = null;
     public TripTalkView mTripTalkView = null;
-    public UserSetting mUserSetting = null;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm){
         super(fm);
@@ -28,14 +27,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return mTripTalkDistribution = new TripTalkDistribution();
             case 3:
                 return mTripTalkView = new TripTalkView();
-            case 4:
-                return mUserSetting = new UserSetting();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 }
