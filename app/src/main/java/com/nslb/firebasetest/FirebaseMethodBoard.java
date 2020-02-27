@@ -1,19 +1,22 @@
 package com.nslb.firebasetest;
 
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nslb.firebasetest.ItemModel.BoardModel;
 import com.nslb.firebasetest.ItemModel.UserInfoModel;
 
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,7 @@ import static android.content.ContentValues.TAG;
 public class FirebaseMethodBoard extends FirebaseMethods {
 
     private DatabaseReference mDatabase;
+
 
     public void submitPost(String title, String body){
         final String ftitle = title;
@@ -51,6 +55,28 @@ public class FirebaseMethodBoard extends FirebaseMethods {
         );
     }
 
+    public FirebaseRecyclerOptions setBoardItem(){
+        DatabaseAccess();
+        Query postQuery = getQuery(mDatabase);
+
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<BoardModel>()
+                .setQuery(postQuery,BoardModel.class)
+                .build();
+
+        return options;
+    }
+
+    public void setComments(int position, String comment) {
+
+    }
+
+    /*public ArrayList<Comment> getComments(){
+        mDatabaseReference.getKey();
+    }*/
+    public DatabaseReference mDatabaseReference = null;
+    public void getDatabaseRef(DatabaseReference ref){
+        this.mDatabaseReference = ref;
+    }
 
     @Override
     public void DatabaseAccess() {
@@ -69,5 +95,12 @@ public class FirebaseMethodBoard extends FirebaseMethods {
         childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
 
         mDatabase.updateChildren(childUpdates);
+    }
+
+    public Query getQuery(DatabaseReference databaseReference) {
+        Query recentPostsQuery = databaseReference.child("posts")
+                .limitToFirst(100);
+
+        return recentPostsQuery;
     }
 }

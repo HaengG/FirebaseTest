@@ -45,6 +45,7 @@ public class NewBoardActivity extends AppCompatActivity {
                     return;
                 }
                 firebaseMethodBoard.submitPost(title, body);
+                finish();
             }
         });
     }

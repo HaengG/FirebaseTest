@@ -22,6 +22,7 @@ public class BoardModel {
         this.author = author;
         this.title = title;
         this.body = body;
+
     }
 
     @Exclude
