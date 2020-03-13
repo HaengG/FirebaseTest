@@ -1,8 +1,8 @@
 package com.nslb.firebasetest.ItemModel;
 
 public class UserInfoModel {
-    public String username = "dd";
-    public String email = "ff";
+    public String username;
+    public String email;
 
     public UserInfoModel(){
 

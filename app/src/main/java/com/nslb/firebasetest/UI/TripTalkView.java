@@ -12,14 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
 import com.nslb.firebasetest.FirebaseMethodBoard;
+import com.nslb.firebasetest.FirebaseRecyclerAdapterEx;
+import com.nslb.firebasetest.Interface.RecyclerAdapterInterface;
 import com.nslb.firebasetest.ItemModel.BoardModel;
 import com.nslb.firebasetest.R;
 
-public class TripTalkView extends Fragment {
+public class TripTalkView extends Fragment implements RecyclerAdapterInterface {
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
-    private FirebaseRecyclerAdapter<BoardModel, BoardViewHolder> mAdapter;
+//    private FirebaseRecyclerAdapterEx<BoardModel, BoardViewHolder> mAdapter;
     private FirebaseMethodBoard firebaseMethodBoard;
 
     @Override
@@ -29,7 +32,8 @@ public class TripTalkView extends Fragment {
 
         mRecycler = view.findViewById(R.id.boardList);
         mRecycler.setHasFixedSize(true);
-        firebaseMethodBoard = new FirebaseMethodBoard();
+        firebaseMethodBoard = new FirebaseMethodBoard(this);
+
 
         view.findViewById(R.id.fabNewPost).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +52,9 @@ public class TripTalkView extends Fragment {
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
-        mAdapter = new FirebaseRecyclerAdapter<BoardModel, BoardViewHolder>(firebaseMethodBoard.setBoardItem()) {
+        //mAdapter = new FirebaseRecyclerAdapterEx<BoardModel, BoardViewHolder>(firebaseMethodBoard.setBoardItem(), this);
 
-
+        /*mAdapter = new FirebaseRecyclerAdapter<BoardModel, BoardViewHolder>(firebaseMethodBoard.setBoardItem()) {
             @Override
             public BoardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
                 LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -72,22 +76,52 @@ public class TripTalkView extends Fragment {
                     }
                 });
             }
-        };
-        mRecycler.setAdapter(mAdapter);
+        };*/
+        mRecycler.setAdapter(firebaseMethodBoard.getAdapter());
     }
     @Override
     public void onStart() {
         super.onStart();
-        if (mAdapter != null) {
-            mAdapter.startListening();
+        if (firebaseMethodBoard.getAdapter() != null) {
+            firebaseMethodBoard.getAdapter().startListening();
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAdapter != null) {
-            mAdapter.stopListening();
+        if (firebaseMethodBoard.getAdapter() != null) {
+            firebaseMethodBoard.getAdapter().stopListening();
         }
+    }
+
+    @Override
+    public void onViewHolderClick(View v) {
+
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull BoardViewHolder viewholder, int position, final  @NonNull BoardModel model, final String key, final DatabaseReference databaseReference) {
+        viewholder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch PostDetailActivity
+                Intent intent = new Intent(getActivity(), BoardDetailActivity.class);
+                intent.putExtra(BoardDetailActivity.EXTRA_POST_KEY, key);
+                startActivity(intent);
+            }
+        });
+        if (model.stars.containsKey(firebaseMethodBoard.getUid())) {
+            viewholder.starView.setImageResource(R.drawable.ic_toggle_star_24);
+        } else {
+            viewholder.starView.setImageResource(R.drawable.ic_toggle_star_outline_24);
+        }
+        viewholder.bindToBoard(model, new View.OnClickListener() {
+            @Override
+            public void onClick(View starView) {
+                // Need to write to both places the post is stored
+                firebaseMethodBoard.clickStars(databaseReference, model);
+            }
+        });
     }
 }

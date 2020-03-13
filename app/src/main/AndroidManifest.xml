@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".UI.NewBoardActivity"/>
         <activity android:name=".UI.SignInActivity"/>
+        <activity android:name=".UI.BoardDetailActivity"/>
     </application>
 
 </manifest>
